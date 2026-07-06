@@ -168,6 +168,68 @@ layout: full
 
 <br>
 
+
+## Card Mod
+<details>
+  <summary>styling</summary>
+
+  There are a few modes to keep in mind when styling.
+  Sizing the card uses different modes
+  
+  ```yaml
+  .content.small
+  .content.tiny
+  .content.half
+  ```
+  
+  Example:
+  
+  ```yaml
+  card_mod:
+    style: |
+      .dots {
+        display: none;
+      }
+      .poster-wrap {
+        transform: scale(1.2);
+        background: none;
+        box-shadow: none;
+        border: none;
+        border-radius: 15px;
+      }
+      .poster {
+        transform: scale(1.0);
+        border-radius: 15px;
+      }
+      ha-card {
+        background: none;
+      }
+      .content.half .dots {
+        display: none;
+      }
+      .content.half .poster-wrap {
+        transform: scale(1.2);
+        background: none;
+        box-shadow: none;
+        border: none;
+        border-radius: 15px;
+      }
+      .content.half .poster {
+        transform: scale(1.0);
+        border-radius: 15px;
+      }
+      .content.half ha-card {
+        background: none;
+      }
+  ```
+  <details>
+    <summary>image(bottom left)</summary>
+    <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" height="500" alt="Style">
+  </details>
+</details>
+
+<br>
+
 ## License
 
 Licensed under the [GNU General Public License v3.0](LICENSE). You're free to use,
