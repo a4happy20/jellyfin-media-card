@@ -11,7 +11,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
 
 ## Config
 <p align="center">
-  <img src="[images/config.png](https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png)" width="500" alt="Jellyfin Media Card">
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png" width="500" alt="Jellyfin Media Card">
 </p>
 
 ## Desktop
