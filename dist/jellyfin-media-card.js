@@ -902,7 +902,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
             { value: "solid", label: "Solid color" },
             { value: "theme", label: "Theme default" },
           ] } } },
-          { name: "background_color", selector: { ui_color: {} } },
+          { name: "background_color", selector: { text: {} } },
         ],
       },
       { name: "sync_group", selector: { text: {} } },
