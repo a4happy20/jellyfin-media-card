@@ -9,6 +9,17 @@ on card size on mobile. Supports two modes, switching between detailed and image
 ![hacs](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)
 ![license](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
+![Jellyfin Media Card](images/config.png)
+![Jellyfin Media Card](images/desktop_01.png)
+![Jellyfin Media Card](images/desktop_01_hover.png)
+![Jellyfin Media Card](images/desktop_02.png)
+![Jellyfin Media Card](images/desktop_03.png)
+![Jellyfin Media Card](images/desktop_04.png)
+
+![Jellyfin Media Card](images/mobile_01.png)
+![Jellyfin Media Card](images/mobile_02.png)
+![Jellyfin Media Card](images/mobile_03.png)
+
 ## Features
 
 - Rotating spotlight of recently added items from a template sensor
