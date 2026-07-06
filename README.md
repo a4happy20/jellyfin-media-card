@@ -31,7 +31,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
 </details>
 
 <details>
-  <summary>Mobile(stack)</summary>
+  <summary>Mobile(stack at taller layouts)</summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_03.png" width="300" alt="Mobile">
 </details>
 
@@ -50,13 +50,18 @@ on card size on mobile. Supports two modes, switching between detailed and image
 
 This card renders a **template sensor** you provide. The sensor's configured
 attribute (default `episodes`) must be a list of items shaped like:
-
 ```
 { id, series, season, episode, title, overview, library, episode_art, series_art, added }
 ```
 
-`added` is used for sorting. Setting up that sensor (and the play script) is
-outside the scope of this card.
+I have outlined how you can modify the sensor and script to work with your Jellyfin instance.
+
+The Sensor:
+- [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) — the data backend
+
+The Script:
+- [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) — the script backend
+
 
 ## Installation
 
@@ -103,6 +108,9 @@ id_field: episode_id
 title: Recently Added
 rotate_seconds: 8
 art_mode: poster
+art_overrides:
+  library: episode
+  library: episode
 transition: slide
 sort_mode: interleaved
 layout: full
@@ -115,7 +123,7 @@ layout: full
 | `type` | string | — | `custom:jellyfin-media-card` (required) |
 | `entity` | string | — | Template sensor holding the media list (required) |
 | `attribute` | string | `episodes` | Attribute on the sensor containing the list |
-| `play_script` | string | `script.jellyfin_play_episode_ready` | Script called on tap |
+| `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
 | `id_field` | string | `episode_id` | Field passed to the play script as the item ID |
 | `title` | string | `""` | Card header title |
 | `api_key` | string | — | Appended to art URLs that need auth |
@@ -130,6 +138,15 @@ layout: full
 | `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
 | `sync_group` | string | `""` | Cards sharing a value rotate together off one clock |
 | `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
+| `accent_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `title_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `header_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `episode_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `counter_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `description_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `background_type` | string | `"art"` | Type of background / art, solid, theme
+| `background_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+
 
 ## License
 
