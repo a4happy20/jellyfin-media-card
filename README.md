@@ -10,7 +10,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
 ![license](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
 ## Visual Details
-<details open>
+<details>
   <summary>Config</summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png" width="1280" alt="Config">
 </details>
