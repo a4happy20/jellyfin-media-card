@@ -11,24 +11,24 @@ on card size on mobile. Supports two modes, switching between detailed and image
 
 ## Config
 <p align="center">
-  <img src="images/config.png" width="500" alt="Jellyfin Media Card">
+  <img src="[images/config.png](https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png)" width="500" alt="Jellyfin Media Card">
 </p>
 
 ## Desktop
 <table align="center">
   <tr>
-    <td valign="top"><img src="images/desktop_03.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="images/desktop_01.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="images/desktop_02.png" width="300" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_03.png" width="300" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_02.png" width="300" alt="Jellyfin Media Card"></td>
   </tr>
 </table>
 
 ## Mobile
 <table align="center">
   <tr>
-    <td valign="top"><img src="images/mobile_01.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="images/mobile_02.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="images/mobile_03.png" width="300" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_01.png" width="300" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_02.png" width="300" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_03.png" width="300" alt="Jellyfin Media Card"></td>
   </tr>
 </table>
 
