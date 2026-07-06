@@ -18,7 +18,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
 <table align="center">
   <tr>
     <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_03.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" alt="Jellyfin Media Card"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" width="300" alt="Jellyfin Media Card"></td>
     <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_02.png" width="300" alt="Jellyfin Media Card"></td>
   </tr>
 </table>
