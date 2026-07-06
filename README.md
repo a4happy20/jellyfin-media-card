@@ -22,26 +22,19 @@ on card size on mobile. Supports two modes, switching between detailed and image
 
 <details>
   <summary>Demo</summary>
-  <video src="https://github.com/user-attachments/assets/7b57b3e8-54c0-4ff0-86db-0995b9cd8178" controls width="200" alt="Jellyfin Media Card"></video>
+  <video src="https://github.com/user-attachments/assets/7b57b3e8-54c0-4ff0-86db-0995b9cd8178" controls width="200" alt="Demo"></video>
 </details>
 
-## Desktop
-<table align="center">
-  <tr>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_03.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_02.png" width="300" alt="Jellyfin Media Card"></td>
-  </tr>
-</table>
+<details>
+  <summary>Poster</summary>
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" width="300" alt="Poster">
+</details>
 
-## Mobile
-<table align="center">
-  <tr>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_01.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_02.png" width="300" alt="Jellyfin Media Card"></td>
-    <td valign="top"><img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_03.png" width="300" alt="Jellyfin Media Card"></td>
-  </tr>
-</table>
+<details>
+  <summary>Mobile(stack)</summary>
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_03.png" width="300" alt="Mobile">
+</details>
+
 
 ## Features
 
