@@ -77,7 +77,9 @@ I have outlined how you can modify the sensor and script to work with your Jelly
 ## Installation
 <details>
   <summary>details</summary>
-  ### HACS (custom repository)
+  <br>
+  
+  HACS (custom repository)
   
   [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
   
