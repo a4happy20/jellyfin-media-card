@@ -9,15 +9,21 @@ on card size on mobile. Supports two modes, switching between detailed and image
 ![hacs](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)
 ![license](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
-## Config
-<p align="center">
-  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png" width="1280" alt="Jellyfin Media Card">
-</p>
+## Visual Details
+<details open>
+  <summary>Config</summary>
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png" width="1280" alt="Config">
+</details>
 
-## Demo
-<p align="center">
-  <video src="https://github.com/user-attachments/assets/92d9dc9e-6441-49b7-b314-29aca5dd7a3a" controls width="200" alt="Jellyfin Media Card"></video>
-</p>
+<details>
+  <summary>Layout</summary>
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/layout.png" width="1280" alt="Layout">
+</details>
+
+<details>
+  <summary>Demo</summary>
+  <video src="https://github.com/user-attachments/assets/7b57b3e8-54c0-4ff0-86db-0995b9cd8178" controls width="200" alt="Jellyfin Media Card"></video>
+</details>
 
 ## Desktop
 <table align="center">
