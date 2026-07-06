@@ -58,6 +58,8 @@ outside the scope of this card.
 
 ### HACS (custom repository)
 
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
+
 1. In HACS, open the three-dot menu → **Custom repositories**.
 2. Add this repository's URL and choose category **Dashboard** (plugin).
 3. Search for **Jellyfin Media Card** and install it.
