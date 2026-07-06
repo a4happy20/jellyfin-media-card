@@ -35,6 +35,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_03.png" width="300" alt="Mobile">
 </details>
 
+<br>
 
 ## Features
 
@@ -47,56 +48,67 @@ on card size on mobile. Supports two modes, switching between detailed and image
 - Sync rotation across multiple cards via a shared `sync_group`
 - Highly customizable
 
+<br>
+
 ## Prerequisites
 
 This card renders a **template sensor** you provide. The sensor's configured
 attribute (default `episodes`) must be a list of items shaped like:
+
+<br>
+
 ```
 { id, series, season, episode, title, overview, library, episode_art, series_art, added }
 ```
 
+<br>
+
 I have outlined how you can modify the sensor and script to work with your Jellyfin instance.
 
-The Sensor:
-- [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) — the data backend
+|     Entity    |          Link         |          Type         |
+|---------------|-----------------------|-----------------------|
+| `The Sensor:` | [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) | The data backend (required) |
+| `The Script:` | [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) | The script backend (optional) |
 
-The Script:
-- [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) — the script backend
-
+<br>
 
 ## Installation
+<details>
+  <summary>details</summary>
+  ### HACS (custom repository)
+  
+  [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
+  
+  1. In HACS, open the three-dot menu → **Custom repositories**.
+  2. Add this repository's URL and choose category **Dashboard** (plugin).
+  3. Search for **Jellyfin Media Card** and install it.
+  4. HACS registers the resource automatically (storage-mode dashboards).
+  
+  ### Manual
+  
+  1. Download `jellyfin-media-card.js` from the latest
+     [release](../../releases/latest).
+  2. Copy it to `config/www/jellyfin-media-card/jellyfin-media-card.js`.
+  3. Register the resource (Settings → Dashboards → three-dot menu → Resources):
+     - URL: `/local/jellyfin-media-card/jellyfin-media-card.js`
+     - Type: **JavaScript Module**
+  
+  For HACS installs the resource URL is
+  `/hacsfiles/jellyfin-media-card/jellyfin-media-card.js` with type `module`.
+  
+  ### YAML-mode dashboards
+  
+  If your dashboard uses `mode: yaml`, HACS can't register the resource
+  automatically. Add it yourself:
+  
+  ```yaml
+  resources:
+    - url: /hacsfiles/jellyfin-media-card/jellyfin-media-card.js
+      type: module
+  ```
+</details>
 
-### HACS (custom repository)
-
-[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
-
-1. In HACS, open the three-dot menu → **Custom repositories**.
-2. Add this repository's URL and choose category **Dashboard** (plugin).
-3. Search for **Jellyfin Media Card** and install it.
-4. HACS registers the resource automatically (storage-mode dashboards).
-
-### Manual
-
-1. Download `jellyfin-media-card.js` from the latest
-   [release](../../releases/latest).
-2. Copy it to `config/www/jellyfin-media-card/jellyfin-media-card.js`.
-3. Register the resource (Settings → Dashboards → three-dot menu → Resources):
-   - URL: `/local/jellyfin-media-card/jellyfin-media-card.js`
-   - Type: **JavaScript Module**
-
-For HACS installs the resource URL is
-`/hacsfiles/jellyfin-media-card/jellyfin-media-card.js` with type `module`.
-
-### YAML-mode dashboards
-
-If your dashboard uses `mode: yaml`, HACS can't register the resource
-automatically. Add it yourself:
-
-```yaml
-resources:
-  - url: /hacsfiles/jellyfin-media-card/jellyfin-media-card.js
-    type: module
-```
+<br>
 
 ## Usage
 
@@ -117,36 +129,42 @@ sort_mode: interleaved
 layout: full
 ```
 
+<br>
+
 ## Configuration options
+<details>
+  <summary>options</summary>
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `type` | string | — | `custom:jellyfin-media-card` (required) |
-| `entity` | string | — | Template sensor holding the media list (required) see [here](https://github.com/a4happy20/jellyfin-media-card-sensors). |
-| `attribute` | string | `episodes` | Attribute on the sensor containing the list |
-| `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
-| `id_field` | string | `episode_id` | Field passed to the play script as the item ID see [here](https://github.com/a4happy20/jellyfin-media-card-play). |
-| `title` | string | `""` | Card header title |
-| `api_key` | string | — | Optional - Generally NOT needed! / Appended to art URLs that need auth |
-| `rotate_seconds` | number | `8` | Seconds per item; `0` disables auto-rotation |
-| `art_mode` | string | `poster` | Default artwork: `poster` or `episode` |
-| `art_overrides` | object | `{}` | Per-library art mode, e.g. `{ youtube: episode }` |
-| `sort_mode` | string | `interleaved` | `interleaved` (newest across libraries) or `grouped` (by library) |
-| `transition` | string | `slide` | Page effect: `slide`, `coverflow`, or `fade` |
-| `poster_ratio` | string | `183/274` | Frame ratio when showing poster art |
-| `episode_ratio` | string | `16/9` | Frame ratio when showing episode art |
-| `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
-| `sync_group` | string | `""` | Cards sharing a value rotate together off one clock |
-| `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
-| `accent_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `title_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `header_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `episode_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `counter_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `description_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `background_type` | string | `"art"` | Type of background / art, solid, theme |
-| `background_color` | string | `""` | only available when background_type: solid |
+  | Option | Type | Default | Description |
+  |--------|------|---------|-------------|
+  | `type` | string | — | `custom:jellyfin-media-card` (required) |
+  | `entity` | string | — | Template sensor holding the media list (required) see [here](https://github.com/a4happy20/jellyfin-media-card-sensors). |
+  | `attribute` | string | `episodes` | Attribute on the sensor containing the list |
+  | `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
+  | `id_field` | string | `episode_id` | Field passed to the play script as the item ID see [here](https://github.com/a4happy20/jellyfin-media-card-play). |
+  | `title` | string | `""` | Card header title |
+  | `api_key` | string | — | Optional - Generally NOT needed! / Appended to art URLs that need auth |
+  | `rotate_seconds` | number | `8` | Seconds per item; `0` disables auto-rotation |
+  | `art_mode` | string | `poster` | Default artwork: `poster` or `episode` |
+  | `art_overrides` | object | `{}` | Per-library art mode, e.g. `{ youtube: episode }` |
+  | `sort_mode` | string | `interleaved` | `interleaved` (newest across libraries) or `grouped` (by library) |
+  | `transition` | string | `slide` | Page effect: `slide`, `coverflow`, or `fade` |
+  | `poster_ratio` | string | `183/274` | Frame ratio when showing poster art |
+  | `episode_ratio` | string | `16/9` | Frame ratio when showing episode art |
+  | `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
+  | `sync_group` | string | `""` | Cards sharing a value rotate together off one clock |
+  | `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
+  | `accent_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+  | `title_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+  | `header_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+  | `episode_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+  | `counter_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+  | `description_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+  | `background_type` | string | `"art"` | Type of background / art, solid, theme |
+  | `background_color` | string | `""` | only available when background_type: solid |
+</details>
 
+<br>
 
 ## License
 
