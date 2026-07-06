@@ -9,6 +9,8 @@ on card size on mobile. Supports two modes, switching between detailed and image
 ![hacs](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)
 ![license](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
+<img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" height="1280" alt="Header">
+
 ## Visual Details
 <details>
   <summary>Config</summary>
