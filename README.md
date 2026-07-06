@@ -43,6 +43,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
 - Poster or episode artwork, with per-library overrides
 - `slide`, `coverflow`, and `fade` page transitions
 - `full` and `half` layouts for the Sections dashboard grid
+- Swiping for mobile and horizontal scroll for desktop
 - Sync rotation across multiple cards via a shared `sync_group`
 - Highly customizable
 
@@ -121,14 +122,13 @@ layout: full
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `type` | string | — | `custom:jellyfin-media-card` (required) |
-| `entity` | string | — | Template sensor holding the media list (required) |
+| `entity` | string | — | Template sensor holding the media list (required) see [here](https://github.com/a4happy20/jellyfin-media-card-sensors). |
 | `attribute` | string | `episodes` | Attribute on the sensor containing the list |
 | `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
-| `id_field` | string | `episode_id` | Field passed to the play script as the item ID |
+| `id_field` | string | `episode_id` | Field passed to the play script as the item ID see [here](https://github.com/a4happy20/jellyfin-media-card-play). |
 | `title` | string | `""` | Card header title |
-| `api_key` | string | — | Appended to art URLs that need auth |
+| `api_key` | string | — | Optional - Generally NOT needed! / Appended to art URLs that need auth |
 | `rotate_seconds` | number | `8` | Seconds per item; `0` disables auto-rotation |
-| `height` | number | `375` | Card height seed (px); real size set on the Layout tab |
 | `art_mode` | string | `poster` | Default artwork: `poster` or `episode` |
 | `art_overrides` | object | `{}` | Per-library art mode, e.g. `{ youtube: episode }` |
 | `sort_mode` | string | `interleaved` | `interleaved` (newest across libraries) or `grouped` (by library) |
@@ -144,8 +144,8 @@ layout: full
 | `episode_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
 | `counter_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
 | `description_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-| `background_type` | string | `"art"` | Type of background / art, solid, theme
-| `background_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
+| `background_type` | string | `"art"` | Type of background / art, solid, theme |
+| `background_color` | string | `""` | only available when background_type: solid |
 
 
 ## License
