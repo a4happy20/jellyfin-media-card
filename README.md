@@ -39,12 +39,12 @@ on card size on mobile. Supports two modes, switching between detailed and image
 ## Features
 
 - Rotating spotlight of recently added items from a template sensor
-- Tap an item to trigger a play script
+- Tap an item to trigger a script
 - Poster or episode artwork, with per-library overrides
 - `slide`, `coverflow`, and `fade` page transitions
 - `full` and `half` layouts for the Sections dashboard grid
-- Visual editor (UI config) included
 - Sync rotation across multiple cards via a shared `sync_group`
+- Highly customizable
 
 ## Prerequisites
 
