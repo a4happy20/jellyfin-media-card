@@ -1,4 +1,3 @@
-![Header](https://github.com/a4happy20/jellyfin-media-card/raw/main/images/header.png)
 # Jellyfin Media Card
 
 A Home Assistant Lovelace card that shows a rotating spotlight of sensor data for
