@@ -1,5 +1,7 @@
 # Jellyfin Media Card
 
+[Main Page](https://github.com/a4happy20/jellyfin-media-card)
+
 A Home Assistant Lovelace card that shows a rotating spotlight of sensor data for
 Jellyfin media, with tap-to-play. Supports poster or episode artwork, multiple
 transition effects, per-library art overrides, and synchronized rotation across
