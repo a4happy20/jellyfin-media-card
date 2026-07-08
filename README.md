@@ -1,41 +1,100 @@
-# Jellyfin Media Card
+<div align="center">
 
-[Main Page](https://github.com/a4happy20/jellyfin-media-card)
+# 📺 Jellyfin Media Card
 
-A Home Assistant Lovelace card that shows a rotating spotlight of sensor data for
-Jellyfin media, with tap-to-play. Supports poster or episode artwork, multiple
-transition effects, per-library art overrides, and synchronized rotation across
-multiple card instances. Fully integrated with layout tab. Different styles depending
-on card size on mobile. Supports two modes, switching between detailed and image only.
+**A Home Assistant Lovelace card that shows a rotating spotlight of your Jellyfin media — with tap-to-play.**
 
-![hacs](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)
-![license](https://img.shields.io/badge/License-GPLv3-blue.svg)
+Poster or episode artwork · multiple transition effects · per-library art overrides ·
+synced rotation across cards · responsive mobile layouts · detailed **and** image-only modes.
 
-![Header](https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-## Visual Details
+<img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" height="1280" alt="Header">
+
+</div>
+
+---
+
+## Contents
+
+- [What is it?](#what-is-it)
+- [How the pieces fit](#how-the-pieces-fit)
+- [Screenshots & demo](#screenshots--demo)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration options](#configuration-options)
+- [Styling with Card Mod](#styling-with-card-mod)
+- [License](#license)
+
+<br>
+
+## What is it?
+
+A custom Lovelace card that turns a Home Assistant sensor full of Jellyfin media into a
+good-looking, rotating spotlight on your dashboard. Tap an item and it plays.
+
+Out of the box it gives you:
+
+- A **rotating carousel** of recently added items, one at a time.
+- **Tap-to-play** — tapping an item triggers a script with data "episode_id" (optional).
+- **Poster or episode artwork**, with per-library overrides.
+- Three page transitions — `slide`, `coverflow`, and `fade`.
+- **Two display modes**: detailed, or image-only.
+- **Responsive layouts** that adapt to card size on mobile, plus `full` and `half`
+  layouts for the Sections dashboard grid.
+- **Synced rotation** — multiple cards can rotate together off one shared clock.
+
+<br>
+
+## How the pieces fit
+
+The card doesn't fetch from Jellyfin itself — it renders a **sensor** you provide, and
+hands taps off to a **script**. Three moving parts:
+
+```mermaid
+flowchart LR
+    S["📡 Sensor backend<br/>(required)"] -->|media list| C["🖼️ Jellyfin Media Card"]
+    C -->|tap to play| P["▶️ Play script<br/>(optional)"]
+```
+
+| Piece | Repository | Required? | What it does |
+|---|---|---|---|
+| **Sensor backend** | [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) | ✅ Yes | Feeds the card its list of media items |
+| **Play script** | [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) | Optional | Handles what happens when you tap an item |
+
+> [!TIP]
+> New here? Set up the **[sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors)**
+> first — the card has nothing to show without it. Then come back and install this card.
+
+<br>
+
+## Screenshots & demo
+
 <details>
-  <summary>Config</summary>
+  <summary><b>Config</b></summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/config.png" width="1280" alt="Config">
 </details>
 
 <details>
-  <summary>Layout</summary>
+  <summary><b>Layout</b></summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/layout.png" width="1280" alt="Layout">
 </details>
 
 <details>
-  <summary>Demo</summary>
+  <summary><b>Demo (video)</b></summary>
   <video src="https://github.com/user-attachments/assets/7b57b3e8-54c0-4ff0-86db-0995b9cd8178" controls width="200" alt="Demo"></video>
 </details>
 
 <details>
-  <summary>Poster</summary>
+  <summary><b>Poster mode</b></summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" width="300" alt="Poster">
 </details>
 
 <details>
-  <summary>Mobile(stack at taller layouts)</summary>
+  <summary><b>Mobile (stacks at taller layouts)</b></summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/mobile_03.png" width="300" alt="Mobile">
 </details>
 
@@ -48,7 +107,7 @@ on card size on mobile. Supports two modes, switching between detailed and image
 - Poster or episode artwork, with per-library overrides
 - `slide`, `coverflow`, and `fade` page transitions
 - `full` and `half` layouts for the Sections dashboard grid
-- Swiping for mobile and horizontal scroll for desktop
+- Swipe on mobile, horizontal scroll on desktop
 - Sync rotation across multiple cards via a shared `sync_group`
 - Highly customizable
 
@@ -56,180 +115,225 @@ on card size on mobile. Supports two modes, switching between detailed and image
 
 ## Prerequisites
 
-This card renders a **template sensor** you provide. The sensor's configured
-attribute (default `episodes`) must be a list of items shaped like:
+This card renders a **template sensor that you provide**. Its configured attribute
+(default `episodes`) must be a list of items shaped like this:
 
-<br>
-
-```
+```jsonc
 { id, series, season, episode, title, overview, library, episode_art, series_art, added }
 ```
 
-<br>
-
-I have outlined how you can modify the sensor and script to work with your Jellyfin instance.
-
-|     Entity    |          Link         |          Type         |
-|---------------|-----------------------|-----------------------|
-| `The Sensor:` | [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) | The data backend (required) |
-| `The Script:` | [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) | The script backend (optional) |
+You don't have to build that by hand — the **[sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors)**
+produces it for you, and its README walks you through pointing it at your own Jellyfin
+instance. The optional **[play script](https://github.com/a4happy20/jellyfin-media-card-play)**
+handles tap-to-play.
 
 <br>
 
 ## Installation
+
+The easiest path is **HACS**. One-click add:
+
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
+
+Or add it by hand in HACS:
+
+1. In HACS, open the three-dot menu → **Custom repositories**.
+2. Paste this repository's URL and choose category **Dashboard** (plugin).
+3. Search for **Jellyfin Media Card** and install it.
+4. HACS registers the resource automatically (on storage-mode dashboards).
+
 <details>
-  <summary>details</summary>
-  <br>
-  
-  HACS (custom repository)
-  
-  [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
-  
-  1. In HACS, open the three-dot menu → **Custom repositories**.
-  2. Add this repository's URL and choose category **Dashboard** (plugin).
-  3. Search for **Jellyfin Media Card** and install it.
-  4. HACS registers the resource automatically (storage-mode dashboards).
-  
-  ### Manual
-  
-  1. Download `jellyfin-media-card.js` from the latest
-     [release](../../releases/latest).
-  2. Copy it to `config/www/jellyfin-media-card/jellyfin-media-card.js`.
-  3. Register the resource (Settings → Dashboards → three-dot menu → Resources):
-     - URL: `/local/jellyfin-media-card/jellyfin-media-card.js`
-     - Type: **JavaScript Module**
-  
-  For HACS installs the resource URL is
-  `/hacsfiles/jellyfin-media-card/jellyfin-media-card.js` with type `module`.
-  
-  ### YAML-mode dashboards
-  
-  If your dashboard uses `mode: yaml`, HACS can't register the resource
-  automatically. Add it yourself:
-  
-  ```yaml
-  resources:
-    - url: /hacsfiles/jellyfin-media-card/jellyfin-media-card.js
-      type: module
-  ```
+  <summary><b>Manual install</b> (without HACS)</summary>
+
+<br>
+
+1. Download `jellyfin-media-card.js` from the latest [release](../../releases/latest).
+2. Copy it to `config/www/jellyfin-media-card/jellyfin-media-card.js`.
+3. Register the resource (**Settings → Dashboards → three-dot menu → Resources**):
+   - **URL:** `/local/jellyfin-media-card/jellyfin-media-card.js`
+   - **Type:** JavaScript Module
+
+For HACS installs, the resource URL is
+`/hacsfiles/jellyfin-media-card/jellyfin-media-card.js` with type `module`.
+</details>
+
+<details>
+  <summary><b>YAML-mode dashboards</b></summary>
+
+<br>
+
+If your dashboard uses `mode: yaml`, HACS can't register the resource automatically —
+add it yourself:
+
+```yaml
+resources:
+  - url: /hacsfiles/jellyfin-media-card/jellyfin-media-card.js
+    type: module
+```
 </details>
 
 <br>
 
 ## Usage
 
+The simplest possible card — just a type and a sensor:
+
 ```yaml
 type: custom:jellyfin-media-card
 entity: sensor.jellyfin_recent_card_data
-attribute: episodes
+```
+
+A fuller example showing common options:
+
+```yaml
+type: custom:jellyfin-media-card
+entity: sensor.jellyfin_recent_card_data
+title: Recently Added
 play_script: script.jellyfin_play_episode_custom_card
 id_field: episode_id
-title: Recently Added
+layout: full
 rotate_seconds: 8
 art_mode: poster
 art_overrides:
-  library: episode
-  library: episode
-transition: slide
+  library: episode      # one entry per library key from your sensor
+  library2: episode
+transition: fade
 sort_mode: interleaved
-layout: full
+font_scale: 0.9
+grid_options:
+  columns: full
+  rows: 6
 ```
+
+> [!NOTE]
+> The keys under `art_overrides` (`library`, `library2`, …) are the library names you
+> defined in the **sensor backend**. Match them to whatever you named your libraries there.
 
 <br>
 
 ## Configuration options
-<details>
-  <summary>options</summary>
 
-  | Option | Type | Default | Description |
-  |--------|------|---------|-------------|
-  | `type` | string | — | `custom:jellyfin-media-card` (required) |
-  | `entity` | string | — | Template sensor holding the media list (required) see [here](https://github.com/a4happy20/jellyfin-media-card-sensors). |
-  | `attribute` | string | `episodes` | Attribute on the sensor containing the list |
-  | `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
-  | `id_field` | string | `episode_id` | Field passed to the play script as the item ID see [here](https://github.com/a4happy20/jellyfin-media-card-play). |
-  | `title` | string | `""` | Card header title |
-  | `api_key` | string | — | Optional - Generally NOT needed! / Appended to art URLs that need auth |
-  | `rotate_seconds` | number | `8` | Seconds per item; `0` disables auto-rotation |
-  | `art_mode` | string | `poster` | Default artwork: `poster` or `episode` |
-  | `art_overrides` | object | `{}` | Per-library art mode, e.g. `{ youtube: episode }` |
-  | `sort_mode` | string | `interleaved` | `interleaved` (newest across libraries) or `grouped` (by library) |
-  | `transition` | string | `slide` | Page effect: `slide`, `coverflow`, or `fade` |
-  | `poster_ratio` | string | `183/274` | Frame ratio when showing poster art |
-  | `episode_ratio` | string | `16/9` | Frame ratio when showing episode art |
-  | `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
-  | `sync_group` | string | `""` | Cards sharing a value rotate together off one clock |
-  | `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
-  | `accent_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-  | `title_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-  | `header_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-  | `episode_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-  | `counter_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-  | `description_color` | string | `""` | primary, accent, default, red, "#252525", rgb(25,25,25,0.8) |
-  | `background_type` | string | `"art"` | Type of background / art, solid, theme |
-  | `background_color` | string | `""` | only available when background_type: solid |
+<details>
+  <summary><b>All options</b></summary>
+
+<br>
+
+**Core**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `type` | string | — | `custom:jellyfin-media-card` (required) |
+| `entity` | string | — | Template sensor holding the media list (required). See the [sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors). |
+| `attribute` | string | `episodes` | Attribute on the sensor containing the list |
+| `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
+| `id_field` | string | `episode_id` | Field passed to the play script as the item ID. See the [play script](https://github.com/a4happy20/jellyfin-media-card-play). |
+| `title` | string | `""` | Card header title |
+| `api_key` | string | — | Optional — usually **not** needed. Appended to art URLs that require auth. |
+
+**Rotation & sorting**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `rotate_seconds` | number | `8` | Seconds per item; `0` disables auto-rotation |
+| `sort_mode` | string | `interleaved` | `interleaved` (newest across libraries) or `grouped` (by library) |
+| `transition` | string | `slide` | Page effect: `slide`, `coverflow`, or `fade` |
+| `sync_group` | string | `""` | Cards sharing a value rotate together off one clock |
+
+**Artwork & background**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `art_mode` | string | `poster` | Default artwork: `poster` or `episode` |
+| `art_overrides` | object | `{}` | Per-library art mode, e.g. `{ youtube: episode }` |
+| `poster_ratio` | string | `183/274` | Frame ratio when showing poster art |
+| `episode_ratio` | string | `16/9` | Frame ratio when showing episode art |
+| `background_type` | string | `"art"` | Background style: `art`, `solid`, or `theme` |
+| `background_color` | string | `""` | Only used when `background_type: solid` |
+
+**Layout & text**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
+| `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
+
+**Colors**
+
+Each of these accepts: `primary`, `accent`, `default`, `red`, a hex value like
+`#252525`, or an `rgb()` / `rgba()` value such as `rgb(25,25,25,0.8)`.
+
+| Option | Type | Default | Applies to |
+|--------|------|---------|------------|
+| `accent_color` | string | `""` | Accent elements |
+| `title_color` | string | `""` | Item title |
+| `header_color` | string | `""` | Card header |
+| `episode_color` | string | `""` | Episode label |
+| `counter_color` | string | `""` | Item counter |
+| `description_color` | string | `""` | Description text |
+
 </details>
 
 <br>
 
+## Styling with Card Mod
 
-## Card Mod
+The card exposes a few size-based modes you can target when styling:
+
+```
+.content.small
+.content.tiny
+.content.half
+```
+
 <details>
-  <summary>styling</summary>
+  <summary><b>Example: minimal poster styling</b></summary>
 
-  There are a few modes to keep in mind when styling.
-  Sizing the card uses different modes
-  
-  ```yaml
-  .content.small
-  .content.tiny
-  .content.half
-  ```
-  
-  Example:
-  
-  ```yaml
-  card_mod:
-    style: |
-      .dots {
-        display: none;
-      }
-      .poster-wrap {
-        transform: scale(1.2);
-        background: none;
-        box-shadow: none;
-        border: none;
-        border-radius: 15px;
-      }
-      .poster {
-        transform: scale(1.0);
-        border-radius: 15px;
-      }
-      ha-card {
-        background: none;
-      }
-      .content.half .dots {
-        display: none;
-      }
-      .content.half .poster-wrap {
-        transform: scale(1.2);
-        background: none;
-        box-shadow: none;
-        border: none;
-        border-radius: 15px;
-      }
-      .content.half .poster {
-        transform: scale(1.0);
-        border-radius: 15px;
-      }
-      .content.half ha-card {
-        background: none;
-      }
-  ```
-  <details>
-    <summary>image(bottom left)</summary>
-    <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" height="500" alt="Style">
-  </details>
+<br>
+
+```yaml
+card_mod:
+  style: |
+    .dots {
+      display: none;
+    }
+    .poster-wrap {
+      transform: scale(1.2);
+      background: none;
+      box-shadow: none;
+      border: none;
+      border-radius: 15px;
+    }
+    .poster {
+      transform: scale(1.0);
+      border-radius: 15px;
+    }
+    ha-card {
+      background: none;
+    }
+    .content.half .dots {
+      display: none;
+    }
+    .content.half .poster-wrap {
+      transform: scale(1.2);
+      background: none;
+      box-shadow: none;
+      border: none;
+      border-radius: 15px;
+    }
+    .content.half .poster {
+      transform: scale(1.0);
+      border-radius: 15px;
+    }
+    .content.half ha-card {
+      background: none;
+    }
+```
+
+<details>
+  <summary>Result (bottom left)</summary>
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" height="500" alt="Style">
+</details>
+
 </details>
 
 <br>
@@ -237,6 +341,5 @@ layout: full
 ## License
 
 Licensed under the [GNU General Public License v3.0](LICENSE). You're free to use,
-modify, and distribute this software, including commercially, provided that
-derivative works are also released under the GPLv3 and their source is made
-available.
+modify, and distribute this software, including commercially, provided that derivative
+works are also released under the GPLv3 and their source is made available.
