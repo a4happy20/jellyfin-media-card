@@ -10,7 +10,7 @@ synced rotation across cards · responsive mobile layouts · detailed **and** im
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-<img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" height="1280" alt="Header">
+<img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" width="1280" alt="Header">
 
 </div>
 
