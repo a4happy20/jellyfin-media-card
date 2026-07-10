@@ -94,7 +94,7 @@ class JellyfinMediaCard extends HTMLElement {
     if (!config.entity) throw new Error("Define 'entity' (the template sensor).");
     this._config = {
       attribute: "episodes",
-      play_script: "script.jellyfin_play_episode_custom_card",
+      play_script: "",
       id_field: "episode_id",
       title: "",
       rotate_seconds: 8,
@@ -132,7 +132,7 @@ class JellyfinMediaCard extends HTMLElement {
     return {
       entity: "sensor.jellyfin_recent_card_data",
       title: "",
-      play_script: "script.jellyfin_play_episode_custom_card",
+      play_script: "",
       id_field: "episode_id",
       rotate_seconds: 8,
       art_mode: "poster",
@@ -230,8 +230,13 @@ class JellyfinMediaCard extends HTMLElement {
            "E" + String(ep.episode == null ? 0 : ep.episode).padStart(2, "0");
   }
 
+  _canPlay() {
+    const s = this._config.play_script;
+    return typeof s === "string" && s.trim() !== "";
+  }
+
   _play(ep) {
-    if (!ep) return;
+    if (!ep || !this._canPlay()) return;
     const parts = this._config.play_script.split(".");
     const data = {};
     data[this._config.id_field] = ep.id;
@@ -409,6 +414,9 @@ class JellyfinMediaCard extends HTMLElement {
     root.querySelector(".epline").textContent =
       this._sxe(ep) + (ep.title ? " \u00b7 " + ep.title : "");
     root.querySelector(".summary").textContent = ep.overview || "";
+    const badgeEl = root.querySelector(".badge");
+    if (badgeEl) badgeEl.textContent =
+      this._config.layout === "upcoming" ? (ep.overview || "Upcoming") : "Episode";
 
     root.querySelectorAll(".dot").forEach((d, i) =>
       d.classList.toggle("active", i === this._index)
@@ -421,6 +429,7 @@ class JellyfinMediaCard extends HTMLElement {
     const h = Number(this._config.height) || 375;  // seed only; real size from Layout tab
     const tier = h < 300 ? "tiny" : (h < 375 ? "small" : "full");
     const isHalf = this._config.layout === "half";
+    const isUpcoming = this._config.layout === "upcoming";
     const fs = Number(this._config.font_scale) || 1;
     const c = this._config;
     const col = (v, d) => {
@@ -494,6 +503,12 @@ class JellyfinMediaCard extends HTMLElement {
         .counter { font-size:13px; color:var(--c-count); font-variant-numeric:tabular-nums; }
         .main { display:flex; gap:20px; flex:1; min-height:0; }
         .stage { display:flex; gap:20px; flex:1; min-height:0; width:100%; }
+        /* ---- non-playable (no play_script): drop the play cues ---- */
+        .content.no-play .poster-wrap { cursor:default; }
+        .content.no-play .poster-wrap .hint { display:none; }
+        .content.no-play .poster-wrap:hover {
+          transform:none; box-shadow:0 8px 26px rgba(0,0,0,.5);
+        }
         .poster-wrap {
           flex-shrink:0; aspect-ratio:183/274; height:100%;
           border-radius:8px; overflow:hidden; background:#0e0f13;
@@ -553,6 +568,17 @@ class JellyfinMediaCard extends HTMLElement {
           align-self:center;
         }
         ha-card.half-card { height:100%; min-height:0; }
+
+        /* ---- upcoming layout: date-pill badge, no synopsis, non-playable ----
+           Sizing is deliberately NOT set here — series clamps, info gap, poster
+           sizing, and every mobile rule are inherited from the 'full' tiers so
+           .content.small / .tiny / .compact and the @media block all still win. */
+        .content.upcoming .info .summary { display:none; }   /* extra class = higher specificity so tier rules can't un-hide it */
+        .content.upcoming .badge {
+          text-transform:none; font-weight:800; letter-spacing:.02em;
+          padding:6px 14px; border-radius:999px;
+          background:rgba(122,162,255,.18); color:var(--accent);
+        }
 
         .dots { display:flex; justify-content:center; gap:6px; padding-top:14px; flex-shrink:0; }
         .dot {
@@ -696,7 +722,7 @@ class JellyfinMediaCard extends HTMLElement {
         <div class="bg-art"></div>
         <div class="bg-art-next"></div>
         <div class="overlay"></div>
-        <div class="content ${tier}${isHalf ? ' half' : ''}">
+        <div class="content ${tier}${isHalf ? ' half' : ''}${isUpcoming ? ' upcoming' : ''}${this._canPlay() ? '' : ' no-play'}">
           ${showHeader ? `
           <div class="header">
             <span class="htitle">${this._config.title}</span>
@@ -867,6 +893,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
           { name: "art_mode", selector: { select: { mode: "dropdown", options: art } } },
           { name: "layout", selector: { select: { mode: "dropdown", options: [
             { value: "full", label: "Full" }, { value: "half", label: "Half" },
+            { value: "upcoming", label: "Upcoming" },
           ] } } },
           { name: "transition", selector: { select: { mode: "dropdown", options: [
             { value: "slide", label: "Slide" },
