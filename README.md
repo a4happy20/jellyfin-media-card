@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📺 Jellyfin Media Card
+# 📺 Jellyfin Media Card with Sonarr calendar support
 
 **A Home Assistant Lovelace card that shows a rotating spotlight of your Jellyfin media — with tap-to-play or Sonarr calendar**
 
@@ -70,7 +70,7 @@ flowchart LR
 | Piece | Repository | Required? | What it does |
 |-------|------------|-----------|--------------|
 | **Sensor backend** | [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) | ✅ Yes | Feeds the card its list of media items |
-| **Sensor backend** | [jellyfin-media-card-sensors](https://github.com/a4happy20/sonarr-calendar-card-sensors) | ✅ Yes | Feeds the card its list of media items |
+| **Sensor backend** | [sonarr-calendar-card-sensors](https://github.com/a4happy20/sonarr-calendar-card-sensors) | ✅ Yes | Feeds the card its list of media items |
 | **Play script** | [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) | Optional | Handles what happens when you tap an item |
 
 > [!TIP]
