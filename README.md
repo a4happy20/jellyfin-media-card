@@ -45,6 +45,8 @@ After adding a sensor it gives you:
 - **Responsive layouts** that adapt to card size on mobile, plus `full` and `half` layouts.
 - **Synced rotation** — multiple cards can be grouped to rotate together.
 
+<br>
+
 After adding a script it gives you:
 
 - **Tap-to-play** — tapping an episode triggers a script with data "episode_id" of the tapped episode.
@@ -58,6 +60,7 @@ hands taps off to a **script**. Three moving parts:
 
 <details>
   <summary><b>Flow</b></summary>
+
 ```mermaid
 flowchart LR
     S["📡 Sensor backend<br/>(required)"] -->|media list| C["🖼️ Jellyfin Media Card"]
