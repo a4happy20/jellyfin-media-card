@@ -8,7 +8,6 @@ Poster or episode artwork · multiple transition effects · per-library art over
 synced rotation across cards · responsive mobile layouts · detailed **and** image-only modes.
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=a4happy20&repository=jellyfin-media-card&category=plugin)
-[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" width="1280" alt="Header">
 <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header_upcoming.png" width="1280" alt="HeaderUpcoming">
@@ -34,19 +33,21 @@ synced rotation across cards · responsive mobile layouts · detailed **and** im
 
 ## What is it?
 
-A custom Lovelace card that turns a Home Assistant sensor full of Jellyfin media into a
-good-looking, rotating spotlight on your dashboard. Tap an item and it plays.
+A custom Lovelace card that turns a Home Assistant sensor full of Jellyfin media or sonarr calendar
+into a good-looking, rotating spotlight on your dashboard. (Optional) Tap an item and it plays.
 
-Out of the box it gives you:
+After adding a sensor it gives you:
 
 - A **rotating carousel** of recently added items, one at a time.
-- **Tap-to-play** — tapping an item triggers a script with data "episode_id" (optional).
 - **Poster or episode artwork**, with per-library overrides.
 - Three page transitions — `slide`, `coverflow`, and `fade`.
-- **Two display modes**: detailed, or image-only.
-- **Responsive layouts** that adapt to card size on mobile, plus `full` and `half`
-  layouts for the Sections dashboard grid.
-- **Synced rotation** — multiple cards can rotate together off one shared clock.
+- **Three display modes**: detailed, image-only, or upcoming(sonarr calendar).
+- **Responsive layouts** that adapt to card size on mobile, plus `full` and `half` layouts.
+- **Synced rotation** — multiple cards can be grouped to rotate together.
+
+After adding a script it gives you:
+
+- **Tap-to-play** — tapping an episode triggers a script with data "episode_id" of the tapped episode.
 
 <br>
 
@@ -55,20 +56,26 @@ Out of the box it gives you:
 The card doesn't fetch from Jellyfin itself — it renders a **sensor** you provide, and
 hands taps off to a **script**. Three moving parts:
 
+<details>
+  <summary><b>Flow</b></summary>
 ```mermaid
 flowchart LR
     S["📡 Sensor backend<br/>(required)"] -->|media list| C["🖼️ Jellyfin Media Card"]
     C -->|tap to play| P["▶️ Play script<br/>(optional)"]
 ```
+</details>
 
 | Piece | Repository | Required? | What it does |
-|---|---|---|---|
+|-------|------------|-----------|--------------|
 | **Sensor backend** | [jellyfin-media-card-sensors](https://github.com/a4happy20/jellyfin-media-card-sensors) | ✅ Yes | Feeds the card its list of media items |
+| **Sensor backend** | [jellyfin-media-card-sensors](https://github.com/a4happy20/sonarr-calendar-card-sensors) | ✅ Yes | Feeds the card its list of media items |
 | **Play script** | [jellyfin-media-card-play](https://github.com/a4happy20/jellyfin-media-card-play) | Optional | Handles what happens when you tap an item |
 
 > [!TIP]
-> New here? Set up the **[sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors)**
-> first — the card has nothing to show without it. Then come back and install this card.
+> New here? You need at least one compatible sensor for the card to work.
+> Setup is simple. Just add the sensors, enter your api & url.
+> Use the Jellyfin **[sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors)**
+> And/Or the Sonarr **[sensor backend](https://github.com/a4happy20/sonarr-calendar-card-sensors)**
 
 <br>
 
@@ -108,6 +115,7 @@ flowchart LR
 - Poster or episode artwork, with per-library overrides
 - `slide`, `coverflow`, and `fade` page transitions
 - `full` and `half` layouts for the Sections dashboard grid
+- `upcoming` layout designed for the sonarr calendar sensor
 - Swipe on mobile, horizontal scroll on desktop
 - Sync rotation across multiple cards via a shared `sync_group`
 - Highly customizable
@@ -123,9 +131,10 @@ This card renders a **template sensor that you provide**. Its configured attribu
 { id, series, season, episode, title, overview, library, episode_art, series_art, added }
 ```
 
-You don't have to build that by hand — the **[sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors)**
-produces it for you, and its README walks you through pointing it at your own Jellyfin
-instance. The optional **[play script](https://github.com/a4happy20/jellyfin-media-card-play)**
+You don't have to build that by hand — the Jellyfin **[sensor backend](https://github.com/a4happy20/jellyfin-media-card-sensors)**
+or the Sonarr **[sensor backend](https://github.com/a4happy20/sonarr-calendar-card-sensors)** produces it for you,
+and its README walks you through pointing it at your own instance.
+The optional **[play script](https://github.com/a4happy20/jellyfin-media-card-play)**
 handles tap-to-play.
 
 <br>
@@ -208,7 +217,7 @@ grid_options:
 
 > [!NOTE]
 > The keys under `art_overrides` (`library`, `library2`, …) are the library names you
-> defined in the **sensor backend**. Match them to whatever you named your libraries there.
+> defined in the Jellyfin **sensor backend**. Match them to whatever you named your libraries there.
 
 <br>
 
@@ -256,6 +265,7 @@ grid_options:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
+| `layout` | string | `full` | `upcoming` (alternate layout for sonarr calendar) |
 | `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
 
 **Colors**
@@ -283,7 +293,9 @@ The card exposes a few size-based modes you can target when styling:
 ```
 .content.small
 .content.tiny
+.content.compact
 .content.half
+.content.upcoming
 ```
 
 <details>
