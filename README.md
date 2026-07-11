@@ -11,6 +11,7 @@ synced rotation across cards · responsive mobile layouts · detailed **and** im
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" width="1280" alt="Header">
+<img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header_upcoming.png" width="1280" alt="HeaderUpcoming">
 
 </div>
 
