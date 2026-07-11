@@ -2,7 +2,7 @@
 
 # 📺 Jellyfin Media Card
 
-**A Home Assistant Lovelace card that shows a rotating spotlight of your Jellyfin media — with tap-to-play.**
+**A Home Assistant Lovelace card that shows a rotating spotlight of your Jellyfin media — with tap-to-play or Sonarr calendar**
 
 Poster or episode artwork · multiple transition effects · per-library art overrides ·
 synced rotation across cards · responsive mobile layouts · detailed **and** image-only modes.
@@ -27,7 +27,6 @@ synced rotation across cards · responsive mobile layouts · detailed **and** im
 - [Usage](#usage)
 - [Configuration options](#configuration-options)
 - [Styling with Card Mod](#styling-with-card-mod)
-- [License](#license)
 
 <br>
 
