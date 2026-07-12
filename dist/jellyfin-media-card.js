@@ -113,6 +113,8 @@ class JellyfinMediaCard extends HTMLElement {
       episode_color: "",
       counter_color: "",
       description_color: "",
+      show_progress: false,    // resume progress bar on the poster
+      progress_color: "",      // blank = fall back to accent color
       background_type: "art",  // art | solid | theme
       background_color: "",    // used when type = solid
       ...config,
@@ -425,6 +427,17 @@ class JellyfinMediaCard extends HTMLElement {
     );
     const counter = root.querySelector(".counter");
     if (counter) counter.textContent = (this._index + 1) + " / " + eps.length;
+
+    const prog = root.querySelector(".progress-fill");
+    if (prog) {
+      const pct = Number(ep.resume_pct);
+      if (this._config.show_progress && isFinite(pct) && pct > 0) {
+        prog.style.width = Math.min(100, pct) + "%";
+        prog.parentElement.style.display = "block";
+      } else {
+        prog.parentElement.style.display = "none";
+      }
+    }
   }
 
   _build() {
@@ -452,6 +465,7 @@ class JellyfinMediaCard extends HTMLElement {
     const cEp    = col(c.episode_color, "#9aa0ab");
     const cCount = col(c.counter_color, "#6b7078");
     const cDesc  = col(c.description_color, "#6b7078");
+    const cProg  = col(c.progress_color, accent);
     const bt = c.background_type || "art";
     const bg = bt === "solid"
       ? col(c.background_color, "#14161b")
@@ -526,6 +540,14 @@ class JellyfinMediaCard extends HTMLElement {
         .poster-wrap:hover .hint { opacity:1; }
         .hint svg { width:46px; height:46px; fill:#fff; filter:drop-shadow(0 2px 6px rgba(0,0,0,.6)); }
         .poster-wrap.playing { animation:pulse .9s ease; }
+        .poster-wrap .progress {
+          position:absolute; left:0; right:0; bottom:0; height:4px;
+          background:rgba(0,0,0,.55); z-index:2; display:none;
+        }
+        .poster-wrap .progress-fill {
+          height:100%; width:0%; background:${cProg};
+          transition:width .3s ease;
+        }
         @keyframes pulse {
           0% { box-shadow:0 0 0 0 rgba(122,162,255,.7); }
           100% { box-shadow:0 0 0 20px rgba(122,162,255,0); }
@@ -735,6 +757,7 @@ class JellyfinMediaCard extends HTMLElement {
               <div class="poster-wrap">
                 <img class="poster" src="" alt="">
                 <div class="hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                ${c.show_progress ? '<div class="progress"><div class="progress-fill"></div></div>' : ''}
               </div>
               <div class="info">
                 <span class="badge">Episode</span>
@@ -914,6 +937,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
           { name: "font_scale", selector: { number: { min: 0.5, max: 2, step: 0.05, mode: "box" } } },
         ],
       },
+      { name: "show_progress", selector: { boolean: {} } },
       {
         type: "grid", name: "", schema: [
           { name: "accent_color",      selector: { text: {} } },
@@ -922,6 +946,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
           { name: "episode_color",     selector: { text: {} } },
           { name: "counter_color",     selector: { text: {} } },
           { name: "description_color", selector: { text: {} } },
+          { name: "progress_color",    selector: { text: {} } },
         ],
       },
       {
@@ -948,6 +973,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
       accent_color: "Accent color", title_color: "Title color",
       header_color: "Header color", episode_color: "Episode text color",
       counter_color: "Counter color", description_color: "Description color",
+      show_progress: "Show resume progress bar", progress_color: "Progress bar color",
       background_type: "Background type", background_color: "Background color (solid)",
       sync_group: "Sync group (match on cards to link rotation)",
     };
