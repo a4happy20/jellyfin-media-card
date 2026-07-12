@@ -240,6 +240,8 @@ class JellyfinMediaCard extends HTMLElement {
     const parts = this._config.play_script.split(".");
     const data = {};
     data[this._config.id_field] = ep.id;
+    if (ep.type != null) data.media_type = ep.type;
+    if (ep.resume_seconds != null) data.resume_seconds = ep.resume_seconds;
     this._hass.callService(parts[0], parts[1], data);
     const poster = this.shadowRoot.querySelector(".poster-wrap");
     if (poster) {
