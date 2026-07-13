@@ -119,6 +119,8 @@ flowchart LR
 - `slide`, `coverflow`, and `fade` page transitions
 - `full` and `half` layouts for the Sections dashboard grid
 - `upcoming` layout designed for the sonarr calendar sensor
+- `progress bar` for continue watching sensor attribute "resume_pct"
+- `options button` button that shows more info of a configurable entity
 - Swipe on mobile, horizontal scroll on desktop
 - Sync rotation across multiple cards via a shared `sync_group`
 - Highly customizable
@@ -241,6 +243,7 @@ grid_options:
 | `play_script` | string | `script.jellyfin_play_episode` | Script called on tap |
 | `id_field` | string | `episode_id` | Field passed to the play script as the item ID. See the [play script](https://github.com/a4happy20/jellyfin-media-card-play). |
 | `title` | string | `""` | Card header title |
+| `options_entity` | string | `"input_select.jellyfin_media_player"` | button that shows an entity's more info |
 | `api_key` | string | — | Optional — usually **not** needed. Appended to art URLs that require auth. |
 
 **Rotation & sorting**
@@ -283,7 +286,7 @@ Each of these accepts: `primary`, `accent`, `default`, `red`, a hex value like
 | `title_color` | string | `""` | Item title |
 | `header_color` | string | `""` | Card header |
 | `episode_color` | string | `""` | Episode label |
-| `counter_color` | string | `""` | Item counter |
+| `counter_color` | string | `""` | Item counter/Options button |
 | `description_color` | string | `""` | Description text |
 | `progress_color` | string | `""` | Progress Bar |
 
