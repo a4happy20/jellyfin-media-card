@@ -11,6 +11,7 @@ synced rotation across cards · responsive mobile layouts · detailed **and** im
 
 <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header.png" width="1280" alt="Header">
 <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header_upcoming.png" width="1280" alt="HeaderUpcoming">
+<img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/header_styled.png" width="1280" alt="HeaderStyled">
 
 </div>
 
@@ -259,8 +260,8 @@ grid_options:
 | `art_overrides` | object | `{}` | Per-library art mode, e.g. `{ youtube: episode }` |
 | `poster_ratio` | string | `183/274` | Frame ratio when showing poster art |
 | `episode_ratio` | string | `16/9` | Frame ratio when showing episode art |
-| `background_type` | string | `"art"` | Background style: `art`, `solid`, or `theme` |
-| `background_color` | string | `""` | Only used when `background_type: solid` |
+| `background_type` | string | `"art"` | Background style: `art`, `custom`, or `theme` |
+| `background:` | string | `url("{episode_art}") center/contain no-repeat` | Only used when `background_type: custom` |
 
 **Layout & text**
 
@@ -268,6 +269,7 @@ grid_options:
 |--------|------|---------|-------------|
 | `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
 | `layout` | string | `full` | `upcoming` (alternate layout for sonarr calendar) |
+| `progress` | toggle | `on/off` | `continue_watching` (display progress bar) |
 | `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
 
 **Colors**
@@ -283,8 +285,22 @@ Each of these accepts: `primary`, `accent`, `default`, `red`, a hex value like
 | `episode_color` | string | `""` | Episode label |
 | `counter_color` | string | `""` | Item counter |
 | `description_color` | string | `""` | Description text |
+| `progress_color` | string | `""` | Progress Bar |
 
 </details>
+
+<br>
+
+## Continue Watching Visibility
+
+I like to have a continue watching card set to only appear when at least one episode exists:
+
+```yaml
+visibility:
+  - condition: numeric_state
+    above: 0
+    entity: sensor.jellyfin_continue_watching_card_data
+```
 
 <br>
 

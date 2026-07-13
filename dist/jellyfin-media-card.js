@@ -96,6 +96,7 @@ class JellyfinMediaCard extends HTMLElement {
       attribute: "episodes",
       play_script: "",
       id_field: "episode_id",
+      options_entity: "",      // more-info opens for this entity via the options button
       title: "",
       rotate_seconds: 8,
       sync_group: "",
@@ -115,8 +116,10 @@ class JellyfinMediaCard extends HTMLElement {
       description_color: "",
       show_progress: false,    // resume progress bar on the poster
       progress_color: "",      // blank = fall back to accent color
-      background_type: "art",  // art | solid | theme
-      background_color: "",    // used when type = solid
+      background_type: "art",  // art | custom | theme
+      background_custom: "",   // custom: any CSS 'background' value; {episode_art} = art
+      background_blur: 0,       // custom: layer blur in px
+      background_opacity: 100,  // custom: layer opacity 0-100
       ...config,
     };
     this._index = 0;
@@ -358,6 +361,19 @@ class JellyfinMediaCard extends HTMLElement {
     target.classList.add("active", "shown");
     other.classList.remove("active", "shown");
 
+    // custom background token support: the field's contents become the CSS
+    // `background` value. {episode_art} / {series_art} resolve to this item's
+    // art and update as the displayed episode changes (all sensors/layouts).
+    const bgCustom = root.querySelector(".bg-custom");
+    if (bgCustom && this.classList.contains("custom-bg")) {
+      const tpl = (this._config.background_custom || "").trim();
+      if (tpl && tpl.indexOf("{") !== -1) {
+        bgCustom.style.background = tpl
+          .split("{episode_art}").join(ep.episode_art || "")
+          .split("{series_art}").join(ep.series_art || "");
+      }
+    }
+
     // frame sizing depends on art type + viewport:
     //  desktop: height-driven (poster fills row; episode height-capped)
     //  mobile:  width-driven (stacked layout has no fixed row height)
@@ -467,9 +483,14 @@ class JellyfinMediaCard extends HTMLElement {
     const cDesc  = col(c.description_color, "#6b7078");
     const cProg  = col(c.progress_color, accent);
     const bt = c.background_type || "art";
-    const bg = bt === "solid"
-      ? col(c.background_color, "#14161b")
-      : "var(--ha-card-background, var(--card-background-color,#14161b))";
+    const bg = "var(--ha-card-background, var(--card-background-color,#14161b))";
+    const bgCustomVal = (c.background_custom || "").trim();
+    const bgCustomHasToken = bgCustomVal.indexOf("{") !== -1;
+    let bgBlur = Number(c.background_blur);
+    if (!isFinite(bgBlur) || bgBlur < 0) bgBlur = 0;
+    let bgOpacity = Number(c.background_opacity);
+    if (!isFinite(bgOpacity)) bgOpacity = 100;
+    bgOpacity = Math.max(0, Math.min(100, bgOpacity)) / 100;
     const showHeader = this._config.title !== "" && this._config.title != null;
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
@@ -508,6 +529,11 @@ class JellyfinMediaCard extends HTMLElement {
           position:absolute; inset:0;
           background:linear-gradient(135deg,rgba(0,0,0,.72),rgba(0,0,0,.42) 50%,rgba(0,0,0,.72));
         }
+        .bg-custom {
+          position:absolute; inset:0; display:none;
+          background:transparent;
+        }
+        :host(.custom-bg) .bg-custom { display:block; }
         .content {
           position:absolute; inset:0; z-index:1; padding:20px;
           display:flex; flex-direction:column;
@@ -581,7 +607,7 @@ class JellyfinMediaCard extends HTMLElement {
         /* ---- half layout: title + centered poster (ratio-sized) + dots below ---- */
         .content.half { padding:14px; }
         .content.half .header { flex-shrink:0; margin-bottom:10px; }
-        .content.half .dots { flex-shrink:0; padding-top:12px; }
+        .content.half .footer { margin-top:12px; }
         .content.half .main { flex:1 1 auto; min-height:0; }
         .content.half .info { display:none; }
         .content.half .stage {
@@ -604,7 +630,23 @@ class JellyfinMediaCard extends HTMLElement {
           background:rgba(122,162,255,.18); color:var(--accent);
         }
 
-        .dots { display:flex; justify-content:center; gap:6px; padding-top:14px; flex-shrink:0; }
+        .footer {
+          display:flex; align-items:center; justify-content:center;
+          margin-top:14px; flex-shrink:0; position:relative;
+        }
+        .opts {
+          position:absolute; right:0; top:0; bottom:0;
+          margin-top:auto; margin-bottom:auto;
+          width:26px; height:26px;
+          display:flex; align-items:center; justify-content:center;
+          background:none; border:none; padding:0; cursor:pointer;
+          color:var(--c-count); border-radius:7px;
+          transform:rotate(90deg);
+          transition:color .2s ease, background .2s ease;
+        }
+        .opts:hover { color:var(--c-count); background:rgba(255,255,255,.12); }
+        .opts svg { width:18px; height:18px; fill:currentColor; }
+        .dots { display:flex; justify-content:center; gap:6px; flex-shrink:0; }
         .dot {
           width:6px; height:6px; border-radius:50%; border:none; padding:0; cursor:pointer;
           background:rgba(255,255,255,.18); transition:all .3s ease;
@@ -673,7 +715,7 @@ class JellyfinMediaCard extends HTMLElement {
             flex:1 1 0; min-height:0;
             max-height:calc(1.4em * 6);          /* hard cap at 6 lines */
           }
-          .dots { padding-top:15px; }
+          .footer { margin-top:15px; }
 
           /* small (mobile, ~6 rows): stack layout (like full), clamp 1, no summary */
           .content.small .summary { display:none; }
@@ -683,7 +725,7 @@ class JellyfinMediaCard extends HTMLElement {
           }
           .content.small .epline { white-space:nowrap; }
           .content.small .poster-wrap { transform:scale(1.1) translateY(4%); }
-          .content.small .dots { padding-top: 15px;}
+          .content.small .footer { margin-top: 15px;}
 
           /* compact + tiny (mobile): desktop-style ROW layout (image left, text right) */
           .content.compact .main, .content.compact .stage,
@@ -746,6 +788,7 @@ class JellyfinMediaCard extends HTMLElement {
         <div class="bg-art"></div>
         <div class="bg-art-next"></div>
         <div class="overlay"></div>
+        <div class="bg-custom"></div>
         <div class="content ${tier}${isHalf ? ' half' : ''}${isUpcoming ? ' upcoming' : ''}${this._canPlay() ? '' : ' no-play'}">
           ${showHeader ? `
           <div class="header">
@@ -767,7 +810,12 @@ class JellyfinMediaCard extends HTMLElement {
               </div>
             </div>
           </div>
-          <div class="dots"></div>
+          <div class="footer">
+            <div class="dots"></div>
+            ${c.options_entity
+              ? `<button class="opts" title="Options" aria-label="Options"><svg viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></button>`
+              : ``}
+          </div>
         </div>
       </ha-card>
     `;
@@ -814,6 +862,18 @@ class JellyfinMediaCard extends HTMLElement {
       this._play(eps[this._index]);
     });
 
+    const optsBtn = this.shadowRoot.querySelector(".opts");
+    if (optsBtn) {
+      optsBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const entityId = this._config.options_entity;
+        if (!entityId) return;
+        const ev = new Event("hass-more-info", { bubbles: true, composed: true });
+        ev.detail = { entityId };
+        this.dispatchEvent(ev);
+      });
+    }
+
     const card = this.shadowRoot.querySelector("ha-card");
     card.addEventListener("mouseenter", () => this._hoverPause(true));
     card.addEventListener("mouseleave", () => this._hoverPause(false));
@@ -855,6 +915,17 @@ class JellyfinMediaCard extends HTMLElement {
     }, { passive: false });
 
     this.classList.toggle("no-hero", bt !== "art");
+    this.classList.toggle("custom-bg", bt === "custom");
+    if (bt === "custom") {
+      const el = this.shadowRoot.querySelector(".bg-custom");
+      if (el) {
+        if (!bgCustomHasToken) el.style.background = bgCustomVal || "transparent";
+        el.style.filter = bgBlur > 0 ? "blur(" + bgBlur + "px)" : "none";
+        // over-scale when blurred so blurred edges don't reveal transparent gaps
+        el.style.transform = bgBlur > 0 ? "scale(1.12)" : "none";
+        el.style.opacity = String(bgOpacity);
+      }
+    }
   }
 }
 
@@ -913,6 +984,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
       { name: "title", selector: { text: {} } },
       { name: "play_script", selector: { entity: { domain: "script" } } },
       { name: "id_field", selector: { text: {} } },
+      { name: "options_entity", selector: { entity: {} } },
       {
         type: "grid", name: "", schema: [
           { name: "art_mode", selector: { select: { mode: "dropdown", options: art } } },
@@ -947,16 +1019,18 @@ class JellyfinMediaCardEditor extends HTMLElement {
           { name: "counter_color",     selector: { text: {} } },
           { name: "description_color", selector: { text: {} } },
           { name: "progress_color",    selector: { text: {} } },
+          { name: "background_type", selector: { select: { mode: "dropdown", options: [
+            { value: "art",    label: "Blurred artwork" },
+            { value: "custom", label: "Custom (CSS background)" },
+            { value: "theme",  label: "Theme default" },
+          ] } } },
         ],
       },
+      { name: "background_custom", selector: { text: {} } },
       {
         type: "grid", name: "", schema: [
-          { name: "background_type", selector: { select: { mode: "dropdown", options: [
-            { value: "art",   label: "Blurred artwork" },
-            { value: "solid", label: "Solid color" },
-            { value: "theme", label: "Theme default" },
-          ] } } },
-          { name: "background_color", selector: { text: {} } },
+          { name: "background_blur", selector: { number: { min: 0, max: 50, step: 1, mode: "box", unit_of_measurement: "px" } } },
+          { name: "background_opacity", selector: { number: { min: 0, max: 100, step: 1, mode: "box", unit_of_measurement: "%" } } },
         ],
       },
       { name: "sync_group", selector: { text: {} } },
@@ -967,6 +1041,7 @@ class JellyfinMediaCardEditor extends HTMLElement {
     const m = {
       entity: "Entity (episodes sensor)", title: "Title",
       play_script: "Play script", id_field: "ID field",
+      options_entity: "Options button entity (opens more-info)",
       art_mode: "Art mode", layout: "Layout", transition: "Transition",
       sort_mode: "Sort mode", rotate_seconds: "Rotate seconds",
       font_scale: "Font scale",
@@ -974,7 +1049,9 @@ class JellyfinMediaCardEditor extends HTMLElement {
       header_color: "Header color", episode_color: "Episode text color",
       counter_color: "Counter color", description_color: "Description color",
       show_progress: "Show resume progress bar", progress_color: "Progress bar color",
-      background_type: "Background type", background_color: "Background color (solid)",
+      background_type: "Background type",
+      background_custom: 'background: url("{episode_art}")',
+      background_blur: "Background blur", background_opacity: "Background opacity",
       sync_group: "Sync group (match on cards to link rotation)",
     };
     return m[s.name] || s.name;
