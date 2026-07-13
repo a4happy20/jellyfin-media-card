@@ -367,7 +367,40 @@ card_mod:
   <summary>Result (bottom left)</summary>
   <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_01.png" height="500" alt="Style">
 </details>
+</details>
 
+<br>
+
+<details>
+  <summary><b>Example: episode art background fade</b></summary>
+
+<br>
+
+```yaml
+background_type: custom
+background_custom: url("{episode_art}") center/cover no-repeat
+background_blur: 3
+background_opacity: 25
+episode_color: rgb(255,180,220)
+title_color: rgba(155,255,255, 0.8)
+accent_color: rgba(255,255,55, 0.5)
+font_scale: 0.8
+card_mod:
+  style: |
+    ha-card {
+      border: none !important;
+      box-shadow: none !important;
+      background-color: #111111;
+    }
+    .bg-custom {
+      transform: scaleX(0.95) scaleY(0.9) !important;
+    }
+```
+
+<details>
+  <summary>Result</summary>
+  <img src="https://raw.githubusercontent.com/a4happy20/jellyfin-media-card/main/images/desktop_05.png" height="500" alt="Style">
+</details>
 </details>
 
 <br>
