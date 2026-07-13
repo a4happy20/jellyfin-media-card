@@ -272,7 +272,7 @@ grid_options:
 |--------|------|---------|-------------|
 | `layout` | string | `full` | `full` (full width) or `half` (poster tile, 6/12 grid columns) |
 | `layout` | string | `full` | `upcoming` (alternate layout for sonarr calendar) |
-| `progress` | toggle | `on/off` | `continue_watching` (display progress bar) |
+| `show_progress` | toggle | `true/false` | `continue_watching` (display progress bar) |
 | `font_scale` | number | `1.0` | Scales card text (0.5–2.0) |
 
 **Colors**
