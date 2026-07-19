@@ -64,6 +64,10 @@ const JFSync = (() => {
       g.members.forEach((m) => m._syncApply(g.index, true));
     }, g.seconds * 1000);
   };
+  const rearm = (g) => {                                // restart the countdown after a manual move
+    if (g.timer) { clearInterval(g.timer); g.timer = null; }
+    arm(g);
+  };
   return {
     join(name, card, seconds) {
       const g = grp(name);
@@ -82,8 +86,8 @@ const JFSync = (() => {
       g.hovered.delete(card);
       if (!g.members.size && g.timer) { clearInterval(g.timer); g.timer = null; }
     },
-    setIndex(name, i) { const g = grp(name); g.index = i;   g.members.forEach((m) => m._syncApply(g.index, true)); },
-    step(name, dir)   { const g = grp(name); g.index += dir; g.members.forEach((m) => m._syncApply(g.index, true)); },
+    setIndex(name, i) { const g = grp(name); g.index = i;   rearm(g); g.members.forEach((m) => m._syncApply(g.index, true)); },
+    step(name, dir)   { const g = grp(name); g.index += dir; rearm(g); g.members.forEach((m) => m._syncApply(g.index, true)); },
     pause(name, card)  { grp(name).hovered.add(card); },
     resume(name, card) { grp(name).hovered.delete(card); },
   };
